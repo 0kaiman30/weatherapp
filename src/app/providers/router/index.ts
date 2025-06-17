@@ -9,6 +9,8 @@ const routes = [
     children: [
       { path: '', component: WeatherPage },
       { path: 'todos', component: TodoPage},
+      // { path: 'week', component: WeekPage},
+      // { path: 'today', component: TodayPage},
     ],
   },
 ]

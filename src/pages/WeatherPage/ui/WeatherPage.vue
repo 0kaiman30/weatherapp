@@ -1,5 +1,5 @@
 <template>
-  <p>WAETHERPAGE</p>
+  <p>WEATHERPAGE</p>
 </template>
 
 <script setup lang="ts"></script>

@@ -10,12 +10,14 @@
           <RouterLink to="/todos" class="header_li_router">ToDo's</RouterLink>
         </li>
       </ul>
+      <ToggleTheme/>
     </nav>
   </header>
 </template>
 
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { ToggleTheme } from "../../../features/ToggleTheme";
 </script>
 
 <style scoped>
@@ -32,21 +34,24 @@ header {
 
 .header_nav {
   display: flex;
+  align-items: center;
 }
 
 .header_ul {
   display: flex;
+  margin-right: 20px;
 }
 
 .header_li {
-  font-size: 15px;
   list-style: none;
   padding: 0 15px;
-  font-weight: 300;
 }
 
 .header_li_router {
+  display: flex;
   text-decoration: none;
-  color: white;
+  color: var(--text-color);
+  font-weight: 450;
+  font-size: 15px;
 }
 </style>
