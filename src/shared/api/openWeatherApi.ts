@@ -51,3 +51,11 @@ export async function getWeatherByCity(city: string): Promise<WeatherData | null
   if (!coordsData.length) return null;
   return getWeatherByCoordinates(coordsData[0].lat, coordsData[0].lon, coordsData[0].name);
 }
+
+export async function getHourlyForecast(lat: number, lon: number) {
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+  );
+  const data = await response.json();
+  return data;
+}

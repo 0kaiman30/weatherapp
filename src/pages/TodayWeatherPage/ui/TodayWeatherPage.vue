@@ -1,9 +1,9 @@
 <template>
-  <WeatherMain />
+  <TodayWeather />
 </template>
 
 <script setup lang="ts">
-import { WeatherMain } from "../../../widgets/index";
+import { TodayWeather } from "../../../widgets/index";
 </script>
 
 <style scoped></style>

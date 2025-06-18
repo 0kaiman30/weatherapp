@@ -23,7 +23,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { getCoordinatesByCity, type CityData } from "../../../api/openWeatherApi";
+import {
+  getCoordinatesByCity,
+  type CityData,
+} from "../../../api/openWeatherApi";
 
 const props = defineProps<{
   modelValue: string;
@@ -52,7 +55,7 @@ const handleInput = async (event: Event) => {
 };
 
 const selectCity = (city: CityData) => {
-  console.log("Selected city:", city); // Отладка
+  console.log("Selected city:", city);
   emit("update:modelValue", city.name);
   emit("selectCity", city);
   suggestions.value = [];
