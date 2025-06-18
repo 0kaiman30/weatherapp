@@ -9,22 +9,22 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits} from 'vue'
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  variant: { type: String, default: 'primary' },
-  size: { type: String, default: 'medium' },
+  variant: { type: String, default: "primary" },
+  size: { type: String, default: "medium" },
   disabled: { type: Boolean, default: false },
-  class: { type: String, default: '' }
-})
+  class: { type: String, default: "" },
+});
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(["click"]);
 
 const handleClick = (event: MouseEvent) => {
-  if (!props.disabled) emit('click', event)
-}
+  if (!props.disabled) emit("click", event);
+};
 
-const customClass = props.class
+const customClass = props.class;
 </script>
 
 <style scoped>
@@ -50,5 +50,11 @@ const customClass = props.class
 .button.large {
   padding: 15px 30px;
   font-size: 18px;
+}
+
+.button.styled {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  font-weight: 400;
 }
 </style>
