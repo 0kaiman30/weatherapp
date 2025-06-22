@@ -60,7 +60,11 @@ export const useWeather = () => {
     dailyData.value = [];
 
     try {
-      const currentWeather = await getWeatherByCoordinates(city.lat, city.lon, city.name);
+      const currentWeather = await getWeatherByCoordinates(
+        city.lat,
+        city.lon,
+        city.name
+      );
       weather.value = {
         ...currentWeather,
         name: city.name || currentWeather.name,
@@ -69,7 +73,12 @@ export const useWeather = () => {
       const hourly = await getHourlyForecast(city.lat, city.lon);
       hourlyData.value = hourly.list.slice(0, 9);
 
-      const dailyMap: { [key: string]: { temps: number[]; weather: { description: string; icon: string }[] } } = {};
+      const dailyMap: {
+        [key: string]: {
+          temps: number[];
+          weather: { description: string; icon: string }[];
+        };
+      } = {};
       hourly.list.slice(0, 40).forEach((item: HourlyWeatherItem) => {
         const date = new Date(item.dt * 1000);
         if (isNaN(date.getTime())) return; // Пропускаем невалидные даты
@@ -82,9 +91,10 @@ export const useWeather = () => {
       });
 
       dailyData.value = Object.entries(dailyMap)
-        .slice(0, 5)
+        .slice(0, 7)
         .map(([dateStr, data]) => {
-          const avgTemp = data.temps.reduce((sum, temp) => sum + temp, 0) / data.temps.length;
+          const avgTemp =
+            data.temps.reduce((sum, temp) => sum + temp, 0) / data.temps.length;
           const mostFrequentWeather = data.weather.reduce((acc, curr) => {
             acc[curr.description] = (acc[curr.description] || 0) + 1;
             return acc;
@@ -92,7 +102,9 @@ export const useWeather = () => {
           const description = Object.keys(mostFrequentWeather).reduce((a, b) =>
             mostFrequentWeather[a] > mostFrequentWeather[b] ? a : b
           );
-          const icon = data.weather.find((w) => w.description === description)?.icon || data.weather[0].icon;
+          const icon =
+            data.weather.find((w) => w.description === description)?.icon ||
+            data.weather[0].icon;
 
           const dateTimestamp = new Date(dateStr).getTime() / 1000;
           if (isNaN(dateTimestamp)) {
@@ -109,11 +121,16 @@ export const useWeather = () => {
         })
         .filter((item): item is DailyWeatherItem => item !== null);
 
-      if (currentWeather.name.toLowerCase() !== city.name.toLowerCase() && city.name) {
+      if (
+        currentWeather.name.toLowerCase() !== city.name.toLowerCase() &&
+        city.name
+      ) {
         cityMismatch.value = true;
       }
     } catch (e) {
-      error.value = "Ошибка загрузки погоды: " + (e instanceof Error ? e.message : String(e));
+      error.value =
+        "Ошибка загрузки погоды: " +
+        (e instanceof Error ? e.message : String(e));
       console.error("Fetch weather error:", e);
     } finally {
       isLoading.value = false;

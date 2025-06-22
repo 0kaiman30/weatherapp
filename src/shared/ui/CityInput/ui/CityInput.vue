@@ -70,24 +70,32 @@ const handleBlur = () => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .input-container {
   position: relative;
   width: 100%;
+  padding: 8px 0;
 }
 
 input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 100%;
-  font-size: 16px;
-  transition: border-color 0.2s;
-}
+  padding: 12px 16px;
+  border: 1px solid rgba(var(--green-color), 0.3);
+  border-radius: 10px;
+  width: 90%;
+  font-size: 15px;
+  background-color: var(--secondary-color);
+  color: var(--text-color-secondary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 
-input:focus {
-  outline: none;
-  border-color: #007bff;
+  &::placeholder {
+    color: rgba(var(--text-color-secondary), 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--green-color);
+    box-shadow: 0 1px 6px rgba(var(--green-color), 0.2);
+  }
 }
 
 .suggestions {
@@ -95,23 +103,22 @@ input:focus {
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  background-color: var(--secondary-color);
+  border: 1px solid rgba(var(--green-color), 0.15);
+  border-radius: 10px;
   list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 150px;
-  overflow-y: auto;
+  padding: 8px 0;
+  max-height: 160px;
   z-index: 10;
-}
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  scrollbar-width: thin;
+  scrollbar-color: var(--green-color) var(--secondary-color);
 
-.suggestions li {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.suggestions li:hover {
-  background: #f0f0f0;
+  li {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-color-secondary);
+  }
 }
 </style>

@@ -7,10 +7,12 @@
           <RouterLink to="/" class="header_li_router">Weather</RouterLink>
         </li>
         <li class="header_li">
-          <RouterLink to="/todos-history" class="header_li_router">ToDo's</RouterLink>
+          <RouterLink to="/todos-history" class="header_li_router"
+            >ToDo's</RouterLink
+          >
         </li>
       </ul>
-      <ToggleTheme/>
+      <ToggleTheme />
     </nav>
   </header>
 </template>
@@ -20,38 +22,46 @@ import { RouterLink } from "vue-router";
 import { ToggleTheme } from "../../../features/ToggleTheme";
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 header {
   display: flex;
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  height: 65px;
-  font-size: 25px;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  height: 64px;
+  padding: 0 32px;
+  font-size: 24px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 1500;
 }
 
 .header_nav {
   display: flex;
   align-items: center;
+  gap: 16px;
 }
 
 .header_ul {
   display: flex;
-  margin-right: 20px;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
 }
 
 .header_li {
-  list-style: none;
-  padding: 0 15px;
+  padding: 8px 12px;
 }
 
 .header_li_router {
-  display: flex;
   text-decoration: none;
-  color: var(--text-color);
-  font-weight: 450;
+  color: var(--text-color-secondary);
   font-size: 15px;
+  font-weight: 400;
+
+  &:hover {
+    color: var(--green-color);
+  }
 }
 </style>

@@ -2,16 +2,18 @@
   <div class="todoList">
     <h2>Список задач</h2>
     <div class="todoList__input">
-      <Input
+      <TaskInput
         v-model="newTask"
         placeholder="Введите новую задачу"
         @keyup.enter="addTask"
+        class="todoList__task-input"
       />
       <Button
         variant="styled"
         size="small"
         @click="addTask"
         :disabled="!newTask.trim()"
+        class="todoList__add-button"
       >
         Добавить
       </Button>
@@ -20,12 +22,19 @@
       <div v-if="!tasks.length" class="no-tasks">Нет активных задач</div>
       <div v-for="task in tasks" :key="task.id" class="task">
         <div v-if="editingTaskId !== task.id" class="task-content">
-          <span>{{ task.text }} (Создано: {{ formatDate(task.createdAt) }})</span>
+          <span class="task-text">{{ task.text }}</span>
+          <span class="task-date"
+            >(Создано: {{ formatDate(task.createdAt) }})</span
+          >
           <div class="task-actions">
             <Button variant="styled" size="small" @click="startEditing(task)">
               Редактировать
             </Button>
-            <Button variant="styled" size="small" @click="completeTask(task.id)">
+            <Button
+              variant="styled"
+              size="small"
+              @click="completeTask(task.id)"
+            >
               Завершить
             </Button>
             <Button variant="styled" size="small" @click="deleteTask(task.id)">
@@ -34,7 +43,11 @@
           </div>
         </div>
         <div v-else class="task-edit">
-          <Input v-model="editingTaskText" @keyup.enter="saveTask(task.id)" />
+          <TaskInput
+            v-model="editingTaskText"
+            @keyup.enter="saveTask(task.id)"
+            class="todoList__task-input"
+          />
           <Button variant="styled" size="small" @click="saveTask(task.id)">
             Сохранить
           </Button>
@@ -49,7 +62,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { Button, Input } from "../../../shared/ui";
+import { Button, TaskInput } from "../../../shared/ui";
 import type { WeatherData } from "../../../shared/api/openWeatherApi";
 
 interface Task {
@@ -80,7 +93,6 @@ const editingTaskText = ref("");
 const STORAGE_KEY = "todoListTasks";
 const STORAGE_COMPLETED_KEY = "todoListCompletedTasks";
 
-// Форматирование даты
 const formatDate = (timestamp: number) => {
   return new Date(timestamp * 1000).toLocaleString("ru-RU", {
     day: "numeric",
@@ -91,7 +103,6 @@ const formatDate = (timestamp: number) => {
   });
 };
 
-// Загрузка задач из localStorage
 onMounted(() => {
   const savedTasks = localStorage.getItem(STORAGE_KEY);
   const savedCompletedTasks = localStorage.getItem(STORAGE_COMPLETED_KEY);
@@ -103,7 +114,6 @@ onMounted(() => {
   }
 });
 
-// Добавление новой задачи
 const addTask = () => {
   if (!newTask.value.trim()) return;
   const task: Task = {
@@ -116,13 +126,11 @@ const addTask = () => {
   newTask.value = "";
 };
 
-// Начало редактирования задачи
 const startEditing = (task: Task) => {
   editingTaskId.value = task.id;
   editingTaskText.value = task.text;
 };
 
-// Сохранение отредактированной задачи
 const saveTask = (taskId: string) => {
   const taskIndex = tasks.value.findIndex((t) => t.id === taskId);
   if (taskIndex !== -1 && editingTaskText.value.trim()) {
@@ -133,13 +141,11 @@ const saveTask = (taskId: string) => {
   editingTaskText.value = "";
 };
 
-// Отмена редактирования
 const cancelEditing = () => {
   editingTaskId.value = null;
   editingTaskText.value = "";
 };
 
-// Завершение задачи
 const completeTask = (taskId: string) => {
   const taskIndex = tasks.value.findIndex((t) => t.id === taskId);
   if (taskIndex === -1) return;
@@ -165,62 +171,215 @@ const completeTask = (taskId: string) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks.value));
 };
 
-// Удаление активной задачи
 const deleteTask = (taskId: string) => {
   tasks.value = tasks.value.filter((t) => t.id !== taskId);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks.value));
 };
 </script>
-
-<style scoped>
+<style scoped lang="scss">
 .todoList {
-  background: var(--card-bg, #f5f5f5);
-  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color) 60%,
+    rgba(var(--green-color), 0.08)
+  );
+  padding: 20px;
   border-radius: 12px;
-  margin-top: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: var(--text-color-secondary);
+  border: 1px solid rgba(var(--green-color), 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-.todoList__input {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
 
-.todoList__tasks {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    padding: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-.task {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
+  &__input {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    align-items: center;
 
-.task-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .todoList__task-input {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid rgba(var(--green-color), 0.3);
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
 
-.task-actions {
-  display: flex;
-  gap: 5px;
-}
+      &:focus {
+        border-color: var(--green-color);
+        outline: none;
+      }
+    }
 
-.task-edit {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
+    .todoList__add-button {
+      background: var(--green-color);
+      color: var(--text-color);
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: transform 0.3s ease, background 0.3s ease;
 
-.no-tasks {
-  padding: 10px;
-  text-align: center;
-  color: #666;
+      &:hover:not(:disabled) {
+        transform: scale(1.05);
+        background: rgba(
+          24,
+          237,
+          116,
+          0.9
+        ); /* Slightly darker green using rgba */
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .task {
+    padding: 12px;
+    background: var(--primary-color);
+    border-radius: 8px;
+    border: 1px solid rgba(var(--green-color), 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .task-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    align-items: center;
+    gap: 8px;
+
+    .task-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-color);
+      text-transform: capitalize;
+    }
+
+    .task-date {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-color-secondary);
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      &::before {
+        content: "•";
+        color: var(--green-color);
+        font-size: 8px;
+      }
+    }
+  }
+
+  .task-actions {
+    display: flex;
+    gap: 6px;
+
+    button {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 4px;
+      transition: transform 0.3s ease, background 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &:first-child {
+        background: var(--blue-color);
+        color: var(--text-color);
+      }
+
+      &:nth-child(2) {
+        background: var(--green-color);
+        color: var(--text-color);
+      }
+
+      &:last-child {
+        background: var(--red-color);
+        color: var(--text-color);
+      }
+    }
+  }
+
+  .task-edit {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .todoList__task-input {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid rgba(var(--green-color), 0.3);
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        border-color: var(--green-color);
+        outline: none;
+      }
+    }
+
+    button {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 4px;
+      transition: transform 0.3s ease, background 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &:first-child {
+        background: var(--green-color);
+        color: var(--text-color);
+      }
+
+      &:last-child {
+        background: var(--red-color);
+        color: var(--text-color);
+      }
+    }
+  }
+
+  .no-tasks {
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+    background: rgba(var(--green-color), 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(var(--green-color), 0.2);
+  }
 }
 </style>

@@ -5,14 +5,21 @@
       Нет завершенных задач
     </div>
     <div v-for="[date, tasks] in groupedTasks" :key="date" class="day-group">
-      <h4>{{ date }}</h4>
+      <h4 class="day-group__title">{{ date }}</h4>
       <div v-for="task in tasks" :key="task.id" class="completed-task">
-        <p>Задача: {{ task.text }}</p>
-        <p>Завершена: {{ formatDate(task.completedAt) }}</p>
-        <p>
-          Погода в {{ task.weather.city }}: {{ task.weather.description }} ({{ task.weather.temp }} °C)
-        </p>
-        <Button variant="styled" size="small" @click="deleteCompletedTask(task.id)">
+        <div class="completed-task__content">
+          <p class="completed-task__text">Задача: {{ task.text }}</p>
+          <p class="completed-task__date">Завершена: {{ formatDate(task.completedAt) }}</p>
+          <p class="completed-task__weather">
+            Погода в {{ task.weather.city }}: {{ task.weather.description }} ({{ task.weather.temp }} °C)
+          </p>
+        </div>
+        <Button
+          variant="styled"
+          size="small"
+          @click="deleteCompletedTask(task.id)"
+          class="completed-task__delete"
+        >
           Удалить
         </Button>
       </div>
@@ -21,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { Button } from '../../../shared/ui';
+import { ref, onMounted, computed } from "vue";
+import { Button } from "../../../shared/ui";
 
 interface Task {
   id: string;
@@ -42,7 +49,6 @@ interface CompletedTask extends Task {
 const completedTasks = ref<CompletedTask[]>([]);
 const STORAGE_COMPLETED_KEY = "todoListCompletedTasks";
 
-// Загрузка завершенных задач из localStorage
 onMounted(() => {
   const savedCompletedTasks = localStorage.getItem(STORAGE_COMPLETED_KEY);
   if (savedCompletedTasks) {
@@ -50,7 +56,6 @@ onMounted(() => {
   }
 });
 
-// Форматирование даты для отображения
 const formatDate = (timestamp: number) => {
   return new Date(timestamp * 1000).toLocaleString("ru-RU", {
     day: "numeric",
@@ -61,7 +66,6 @@ const formatDate = (timestamp: number) => {
   });
 };
 
-// Форматирование даты только для дня (для группировки)
 const formatDay = (timestamp: number) => {
   return new Date(timestamp * 1000).toLocaleDateString("ru-RU", {
     day: "numeric",
@@ -70,7 +74,6 @@ const formatDay = (timestamp: number) => {
   });
 };
 
-// Группировка задач по дням
 const groupedTasks = computed(() => {
   const groups = new Map<string, CompletedTask[]>();
   completedTasks.value.forEach((task) => {
@@ -81,51 +84,150 @@ const groupedTasks = computed(() => {
     groups.get(day)!.push(task);
   });
   return Array.from(groups.entries()).sort((a, b) => {
-    const dateA = new Date(completedTasks.value.find(t => formatDay(t.completedAt) === a[0])!.completedAt * 1000);
-    const dateB = new Date(completedTasks.value.find(t => formatDay(t.completedAt) === b[0])!.completedAt * 1000);
+    const dateA = new Date(
+      completedTasks.value.find((t) => formatDay(t.completedAt) === a[0])!
+        .completedAt * 1000
+    );
+    const dateB = new Date(
+      completedTasks.value.find((t) => formatDay(t.completedAt) === b[0])!
+        .completedAt * 1000
+    );
     return dateB.getTime() - dateA.getTime();
   });
 });
 
-// Удаление завершенной задачи
 const deleteCompletedTask = (taskId: string) => {
   completedTasks.value = completedTasks.value.filter((t) => t.id !== taskId);
-  localStorage.setItem(STORAGE_COMPLETED_KEY, JSON.stringify(completedTasks.value));
+  localStorage.setItem(
+    STORAGE_COMPLETED_KEY,
+    JSON.stringify(completedTasks.value)
+  );
 };
 </script>
-
-<style scoped>
+<style scoped lang="scss">
 .todoList__history {
-  margin-top: 20px;
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color) 60%,
+    rgba(var(--green-color), 0.08)
+  );
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: var(--text-color-secondary);
+  border: 1px solid rgba(var(--green-color), 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    padding: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }
 
 .day-group {
-  margin-bottom: 20px;
-}
+  padding: 12px 0;
 
-.day-group h4 {
-  margin-bottom: 10px;
-  font-size: 1.1em;
-  color: #333;
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+    padding: 6px 8px;
+    background: rgba(var(--green-color), 0.15);
+    border-radius: 6px;
+    display: inline-block;
+  }
 }
 
 .completed-task {
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  background: var(--primary-color);
   border-radius: 8px;
-  margin-bottom: 10px;
+  border: 1px solid rgba(var(--green-color), 0.15);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-}
+  gap: 8px;
+  margin: 8px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-.completed-task button {
-  align-self: flex-end;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &::before {
+      content: "•";
+      color: var(--green-color);
+      font-size: 8px;
+    }
+  }
+
+  &__date,
+  &__weather {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &::before {
+      content: "•";
+      color: var(--green-color);
+      font-size: 8px;
+    }
+  }
+
+  &__delete {
+    align-self: flex-end;
+    padding: 6px 12px;
+    font-size: 12px;
+    background: var(--red-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    transition: transform 0.3s ease, background 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      background: rgba(239, 68, 68, 0.9); /* Slightly darker red using rgba */
+    }
+  }
 }
 
 .no-tasks {
-  padding: 10px;
+  padding: 12px;
   text-align: center;
-  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  background: rgba(var(--green-color), 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(var(--green-color), 0.2);
 }
 </style>
