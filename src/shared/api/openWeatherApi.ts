@@ -18,18 +18,27 @@ export type WeatherData = {
   weather: { description: string; icon: string }[];
   main: { temp: number; feels_like: number };
   name: string;
+  sys: {
+    country: string;
+  };
 };
 
 export async function getCoordinatesByCity(city: string, limit = 1): Promise<CityData[]> {
   const query = city.includes(",") ? city : `${city}`;
   const response = await fetch(`${GEO_BASE_URL}?q=${query}&limit=${limit}&appid=${API_KEY}`);
+  if (!response.ok) {
+    throw new Error(`Geocoding API error: ${response.statusText}`);
+  }
   const data = await response.json();
   console.log(`Geocoding API response for "${query}":`, data);
+  if (!Array.isArray(data) || !data.length) {
+    throw new Error("Ггород не найден");
+  }
   return data.map((item: any) => ({
-    name: item.name,
-    country: item.country,
-    lat: item.lat,
-    lon: item.lon,
+    name: query.split(",")[0].trim(),
+    country: item.country || "",
+    lat: item.lat || 0,
+    lon: item.lon || 0,
   }));
 }
 

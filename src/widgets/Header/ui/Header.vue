@@ -7,7 +7,7 @@
           <RouterLink to="/" class="header_li_router">Weather</RouterLink>
         </li>
         <li class="header_li">
-          <RouterLink to="/todos" class="header_li_router">ToDo's</RouterLink>
+          <RouterLink to="/todos-history" class="header_li_router">ToDo's</RouterLink>
         </li>
       </ul>
       <ToggleTheme/>

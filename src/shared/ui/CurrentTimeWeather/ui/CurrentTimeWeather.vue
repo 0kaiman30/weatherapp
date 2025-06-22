@@ -1,6 +1,7 @@
+<!-- src/components/weather/CurrentTimeWeather.vue -->
 <template>
   <div class="current-weather">
-    <h2>Погода сейчас</h2>
+    <h2>Погода сейчас в {{ city.name }}</h2>
     <div class="current-weather__main">
       <img :src="`https://openweathermap.org/img/wn/${icon}@4x.png`" :alt="description" />
       <div class="current-weather__info">
@@ -19,6 +20,8 @@
 </template>
 
 <script setup lang="ts">
+import type { CityData } from "../../../api/openWeatherApi";
+
 interface Props {
   temp: number;
   feelsLike: number;
@@ -31,9 +34,10 @@ interface Props {
   windSpeed: number;
   windDeg: number;
   rain: number;
+  city: CityData;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <style scoped>
@@ -42,7 +46,7 @@ const props = defineProps<Props>();
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 .current-weather__main {
   display: flex;

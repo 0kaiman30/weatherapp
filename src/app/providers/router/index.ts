@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AppLayout from "./ui/AppLayout/AppLayout.vue";
-import { TodayWeatherPage, TodoPage, WeatherPage } from "../../../pages/index";
+import { TodoHistoryPage, WeatherPage } from "../../../pages/index";
 
 const routes = [
   {
@@ -8,9 +8,7 @@ const routes = [
     component: AppLayout,
     children: [
       { path: "", component: WeatherPage },
-      { path: "todos", component: TodoPage },
-      // { path: 'week', component: WeekPage},
-      { path: "today-weather", component: TodayWeatherPage },
+      { path: "todos-history", component: TodoHistoryPage },
     ],
   },
 ];
