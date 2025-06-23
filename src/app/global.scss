@@ -43,10 +43,11 @@ html {
 
 :root {
   --primary-color: #ffffff;
-  --secondary-color: #f0fdf4;
-  --back-color: #9ff8c6;
-  --text-color: #1a3c34;
-  --text-color-secondary: #014d2f;
+  --secondary-color: #ffffff;
+  --back-color: #c8ffe0;
+  --text-color: #014d2f;
+  --button-text-color: #ffffff;
+  --text-color-secondary: #38af93 ;
   --red-color: #ef4444;
   --green-color: #18ed74;
   --blue-color: #3b82f6;
@@ -65,6 +66,7 @@ html {
   --back-color: rgb(31, 31, 31);
   --text-color: #f8f9fa;
   --text-color-secondary: #f8f9fa;
+  --button-text-color: #ffffff;
   --red-color: #dc3545;
   --green-color: #28a745;
   --blue-color: #007bff;

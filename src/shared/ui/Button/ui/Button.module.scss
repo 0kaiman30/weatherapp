@@ -1,0 +1,73 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-weight: 400;
+  transition: transform 0.3s ease, background 0.3s ease;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.small {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.icon {
+  background-color: transparent;
+}
+
+.medium {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.large {
+  padding: 15px 30px;
+  font-size: 18px;
+}
+
+.primary {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+.add {
+  background-color: var(--green-color);
+  color: var(--button-text-color);
+}
+
+.edit {
+  background-color: var(--blue-color);
+  color: var(--button-text-color);
+}
+
+.complete {
+  background-color: var(--green-color);
+  color: var(--button-text-color);
+}
+
+.save {
+  background-color: var(--green-color);
+  color: var(--button-text-color);
+}
+
+.cancel {
+  background-color: var(--red-color);
+  color: var(--button-text-color);
+}
+
+.delete {
+  background-color: var(--red-color);
+  color: var(--button-text-color);
+}

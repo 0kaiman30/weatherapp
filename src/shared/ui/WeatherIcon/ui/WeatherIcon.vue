@@ -2,11 +2,13 @@
   <img
     :src="`https://openweathermap.org/img/wn/${icon}@2x.png`"
     :alt="`Weather icon ${icon}`"
-    class="weatherIcon"
+    :class="cls.weatherIcon"
   />
 </template>
 
 <script setup lang="ts">
+import cls from "./WeatherIcon.module.scss";
+
 interface Props {
   icon: string;
 }
@@ -14,9 +16,4 @@ interface Props {
 defineProps<Props>();
 </script>
 
-<style scoped>
-.weatherIcon {
-  width: 10px;
-  height: 10px;
-}
-</style>
+<style scoped></style>

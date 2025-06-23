@@ -1,5 +1,5 @@
 <template>
-  <div class="input-container">
+  <div :class="cls['input-container']">
     <input
       :value="modelValue"
       @input="handleInput"
@@ -8,8 +8,9 @@
       @focus="showSuggestions = true"
       @blur="handleBlur"
       ref="inputRef"
+      :class="cls.input"
     />
-    <ul v-if="showSuggestions && suggestions.length" class="suggestions">
+    <ul v-if="showSuggestions && suggestions.length" :class="cls.suggestions">
       <li
         v-for="city in suggestions"
         :key="`${city.name}-${city.country}-${city.lat}-${city.lon}`"
@@ -27,6 +28,7 @@ import {
   getCoordinatesByCity,
   type CityData,
 } from "../../../api/openWeatherApi";
+import cls from "./CityInput.module.scss";
 
 const props = defineProps<{
   modelValue: string;
@@ -70,55 +72,4 @@ const handleBlur = () => {
 };
 </script>
 
-<style scoped lang="scss">
-.input-container {
-  position: relative;
-  width: 100%;
-  padding: 8px 0;
-}
-
-input {
-  padding: 12px 16px;
-  border: 1px solid rgba(var(--green-color), 0.3);
-  border-radius: 10px;
-  width: 90%;
-  font-size: 15px;
-  background-color: var(--secondary-color);
-  color: var(--text-color-secondary);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-
-  &::placeholder {
-    color: rgba(var(--text-color-secondary), 0.5);
-  }
-
-  &:focus {
-    outline: none;
-    border-color: var(--green-color);
-    box-shadow: 0 1px 6px rgba(var(--green-color), 0.2);
-  }
-}
-
-.suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: var(--secondary-color);
-  border: 1px solid rgba(var(--green-color), 0.15);
-  border-radius: 10px;
-  list-style: none;
-  padding: 8px 0;
-  max-height: 160px;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  scrollbar-width: thin;
-  scrollbar-color: var(--green-color) var(--secondary-color);
-
-  li {
-    padding: 12px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--text-color-secondary);
-  }
-}
-</style>
+<style scoped lang="scss"></style>

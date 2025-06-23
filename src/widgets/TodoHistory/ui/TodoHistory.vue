@@ -1,16 +1,22 @@
 <template>
-  <div class="todoList__history">
+  <div :class="cls.todoList__history">
     <h3>History of completed tasks</h3>
-    <div v-if="!groupedTasks.length" class="no-tasks">No completed tasks</div>
-    <div v-for="[date, tasks] in groupedTasks" :key="date" class="day-group">
-      <h4 class="day-group__title">{{ date }}</h4>
-      <div v-for="task in tasks" :key="task.id" class="completed-task">
-        <div class="completed-task__content">
-          <p class="completed-task__text">Task: {{ task.text }}</p>
-          <p class="completed-task__date">
+    <div v-if="!groupedTasks.length" :class="cls['no-tasks']">
+      No completed tasks
+    </div>
+    <div
+      v-for="[date, tasks] in groupedTasks"
+      :key="date"
+      :class="cls['day-group']"
+    >
+      <h4 :class="cls['day-group__title']">{{ date }}</h4>
+      <div v-for="task in tasks" :key="task.id" :class="cls['completed-task']">
+        <div :class="cls['completed-task__content']">
+          <p :class="cls['completed-task__text']">Task: {{ task.text }}</p>
+          <p :class="cls['completed-task__date']">
             Completed: {{ formatDate(task.completedAt) }}
           </p>
-          <p class="completed-task__weather">
+          <p :class="cls['completed-task__weather']">
             Weather in {{ task.weather.city }}:
             {{ task.weather.description }} ({{ task.weather.temp }} °C)
           </p>
@@ -19,7 +25,7 @@
           variant="styled"
           size="small"
           @click="deleteCompletedTask(task.id)"
-          class="completed-task__delete"
+          :class="cls['completed-task__delete']"
         >
           Delete
         </Button>
@@ -31,6 +37,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { Button } from "../../../shared/ui";
+import cls from "./TodoHistory.module.scss";
 
 interface Task {
   id: string;
@@ -106,130 +113,4 @@ const deleteCompletedTask = (taskId: string) => {
 };
 </script>
 
-<style scoped lang="scss">
-.todoList__history {
-  background: linear-gradient(
-    135deg,
-    var(--secondary-color) 60%,
-    rgba(var(--green-color), 0.08)
-  );
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  color: var(--text-color-secondary);
-  border: 1px solid rgba(var(--green-color), 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  }
-
-  h3 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-color);
-    text-align: center;
-    padding: 0 0 12px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-}
-
-.day-group {
-  padding: 12px 0;
-
-  &__title {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-color);
-    text-transform: capitalize;
-    padding: 6px 8px;
-    background: rgba(var(--green-color), 0.15);
-    border-radius: 6px;
-    display: inline-block;
-  }
-}
-
-.completed-task {
-  padding: 12px;
-  background: var(--primary-color);
-  border-radius: 8px;
-  border: 1px solid rgba(var(--green-color), 0.15);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 8px 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  &__text {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-color);
-    text-transform: capitalize;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    &::before {
-      content: "•";
-      color: var(--green-color);
-      font-size: 8px;
-    }
-  }
-
-  &__date,
-  &__weather {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-color-secondary);
-    opacity: 0.85;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    &::before {
-      content: "•";
-      color: var(--green-color);
-      font-size: 8px;
-    }
-  }
-
-  &__delete {
-    align-self: flex-end;
-    padding: 6px 12px;
-    font-size: 12px;
-    background: var(--red-color);
-    color: var(--text-color);
-    border-radius: 4px;
-    transition: transform 0.3s ease, background 0.3s ease;
-
-    &:hover {
-      transform: scale(1.05);
-      background: rgba(239, 68, 68, 0.9);
-    }
-  }
-}
-
-.no-tasks {
-  padding: 12px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-color-secondary);
-  background: rgba(var(--green-color), 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(var(--green-color), 0.2);
-}
-</style>
+<style scoped lang="scss"></style>

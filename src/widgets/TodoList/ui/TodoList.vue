@@ -1,32 +1,32 @@
 <template>
-  <div class="todoList">
+  <div :class="cls.todoList">
     <h2>Todo List</h2>
-    <div class="todoList__input">
+    <div :class="cls['todoList__input']">
       <TaskInput
         v-model="newTask"
         placeholder="Enter a new task"
         @keyup.enter="addTask"
-        class="todoList__task-input"
+        :class="cls['todoList__task-input']"
       />
       <Button
         variant="add"
         size="small"
         @click="addTask"
         :disabled="!newTask.trim()"
-        class="todoList__add-button"
+        :class="cls['todoList__add-button']"
       >
         Add
       </Button>
     </div>
-    <div class="todoList__tasks">
-      <div v-if="!tasks.length" class="no-tasks">No active tasks</div>
-      <div v-for="task in tasks" :key="task.id" class="task">
-        <div v-if="editingTaskId !== task.id" class="task-content">
-          <span class="task-text">{{ task.text }}</span>
-          <span class="task-date"
+    <div :class="cls['todoList__tasks']">
+      <div v-if="!tasks.length" :class="cls['no-tasks']">No active tasks</div>
+      <div v-for="task in tasks" :key="task.id" :class="cls.task">
+        <div v-if="editingTaskId !== task.id" :class="cls['task-content']">
+          <span :class="cls['task-text']">{{ task.text }}</span>
+          <span :class="cls['task-date']"
             >(Created: {{ formatDate(task.createdAt) }})</span
           >
-          <div class="task-actions">
+          <div :class="cls['task-actions']">
             <Button variant="edit" size="small" @click="startEditing(task)">
               Edit
             </Button>
@@ -42,11 +42,11 @@
             </Button>
           </div>
         </div>
-        <div v-else class="task-edit">
+        <div v-else :class="cls['task-edit']">
           <TaskInput
             v-model="editingTaskText"
             @keyup.enter="saveTask(task.id)"
-            class="todoList__task-input"
+            :class="cls['todoList__task-input']"
           />
           <Button variant="save" size="small" @click="saveTask(task.id)">
             Save
@@ -64,6 +64,7 @@
 import { ref, onMounted } from "vue";
 import { Button, TaskInput } from "../../../shared/ui";
 import type { WeatherData } from "../../../shared/api/openWeatherApi";
+import cls from "./TodoList.module.scss";
 
 interface Task {
   id: string;
@@ -178,140 +179,4 @@ const deleteTask = (taskId: string) => {
 </script>
 
 <style scoped lang="scss">
-.todoList {
-  background-color: var(--back-color);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  color: var(--text-color-secondary);
-  border: 1px solid rgba(var(--green-color), 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  }
-
-  h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-color);
-    text-align: center;
-    padding: 0 0 12px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &__input {
-    display: flex;
-    gap: 8px;
-    padding: 8px 0;
-    align-items: center;
-
-    .todoList__task-input {
-      flex-grow: 1;
-      border: 1px solid rgba(var(--green-color), 0.3);
-      border-radius: 6px;
-      font-size: 14px;
-      transition: border-color 0.3s ease;
-
-      &:focus {
-        border-color: var(--green-color);
-        outline: none;
-      }
-    }
-
-    .todoList__add-button {
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-  }
-
-  &__tasks {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px 0;
-  }
-
-  .task {
-    padding: 12px;
-    background: var(--primary-color);
-    border-radius: 8px;
-    border: 1px solid rgba(var(--green-color), 0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  .task-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr auto;
-    align-items: center;
-    gap: 8px;
-
-    .task-text {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-color);
-      text-transform: capitalize;
-    }
-
-    .task-date {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-color-secondary);
-      opacity: 0.85;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-
-      &::before {
-        content: "•";
-        color: var(--green-color);
-        font-size: 8px;
-      }
-    }
-  }
-
-  .task-actions {
-    display: flex;
-    gap: 6px;
-  }
-
-  .task-edit {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-
-    .todoList__task-input {
-      flex-grow: 1;
-      padding: 8px 12px;
-      border: 1px solid rgba(var(--green-color), 0.3);
-      border-radius: 6px;
-      font-size: 14px;
-      transition: border-color 0.3s ease;
-
-      &:focus {
-        border-color: var(--green-color);
-        outline: none;
-      }
-    }
-  }
-
-  .no-tasks {
-    padding: 12px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-color-secondary);
-    background: rgba(var(--green-color), 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(var(--green-color), 0.2);
-  }
-}
 </style>
