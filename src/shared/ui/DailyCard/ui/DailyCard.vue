@@ -11,7 +11,9 @@
       />
       <div class="dailyCard__info">
         <p class="dailyCard__temp">{{ temp }} °C</p>
-        <p v-if="description" class="dailyCard__description">{{ description }}</p>
+        <p v-if="description" class="dailyCard__description">
+          {{ description }}
+        </p>
       </div>
     </div>
   </div>
@@ -32,7 +34,7 @@ const props = defineProps<Props>();
 
 const formattedDate = computed(() => {
   const date = new Date(props.date * 1000);
-  return date.toLocaleDateString("ru-RU", {
+  return date.toLocaleDateString("en-EN", {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -46,11 +48,8 @@ const formattedDate = computed(() => {
   gap: 8px;
   width: 100%;
   padding: 14px;
-  background: linear-gradient(
-    135deg,
-    var(--secondary-color) 60%,
-    rgba(var(--green-color), 0.08) 100%
-  );
+  background-color: var(--secondary-color);
+
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
   color: var(--text-color-secondary);
@@ -68,13 +67,13 @@ const formattedDate = computed(() => {
     padding: 4px 0;
 
     .dailyCard__date {
-      font-size: 13px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--text-color);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       background: rgba(var(--green-color), 0.15);
-      padding: 2px 8px;
+      padding: 2px 8px 0 8px;
       border-radius: 4px;
     }
   }
@@ -83,12 +82,12 @@ const formattedDate = computed(() => {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 0;
+    padding: 4px 7px;
   }
 
   &__icon {
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     transition: transform 0.3s ease;
 
@@ -110,7 +109,7 @@ const formattedDate = computed(() => {
     }
 
     .dailyCard__description {
-      font-size: 13px;
+      font-size: 10px;
       font-weight: 500;
       color: var(--text-color-secondary);
       text-transform: capitalize;
@@ -121,8 +120,8 @@ const formattedDate = computed(() => {
 
       &::before {
         content: "•";
-        color: var(--green-color);
         font-size: 10px;
+        color: var(--green-color);
       }
     }
   }

@@ -1,17 +1,18 @@
 <template>
   <div class="todoList__history">
-    <h3>История завершенных задач</h3>
-    <div v-if="!groupedTasks.length" class="no-tasks">
-      Нет завершенных задач
-    </div>
+    <h3>History of completed tasks</h3>
+    <div v-if="!groupedTasks.length" class="no-tasks">No completed tasks</div>
     <div v-for="[date, tasks] in groupedTasks" :key="date" class="day-group">
       <h4 class="day-group__title">{{ date }}</h4>
       <div v-for="task in tasks" :key="task.id" class="completed-task">
         <div class="completed-task__content">
-          <p class="completed-task__text">Задача: {{ task.text }}</p>
-          <p class="completed-task__date">Завершена: {{ formatDate(task.completedAt) }}</p>
+          <p class="completed-task__text">Task: {{ task.text }}</p>
+          <p class="completed-task__date">
+            Completed: {{ formatDate(task.completedAt) }}
+          </p>
           <p class="completed-task__weather">
-            Погода в {{ task.weather.city }}: {{ task.weather.description }} ({{ task.weather.temp }} °C)
+            Weather in {{ task.weather.city }}:
+            {{ task.weather.description }} ({{ task.weather.temp }} °C)
           </p>
         </div>
         <Button
@@ -20,7 +21,7 @@
           @click="deleteCompletedTask(task.id)"
           class="completed-task__delete"
         >
-          Удалить
+          Delete
         </Button>
       </div>
     </div>
@@ -57,7 +58,7 @@ onMounted(() => {
 });
 
 const formatDate = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleString("ru-RU", {
+  return new Date(timestamp * 1000).toLocaleString("en-US", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -67,7 +68,7 @@ const formatDate = (timestamp: number) => {
 };
 
 const formatDay = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleDateString("ru-RU", {
+  return new Date(timestamp * 1000).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -104,6 +105,7 @@ const deleteCompletedTask = (taskId: string) => {
   );
 };
 </script>
+
 <style scoped lang="scss">
 .todoList__history {
   background: linear-gradient(
@@ -215,7 +217,7 @@ const deleteCompletedTask = (taskId: string) => {
 
     &:hover {
       transform: scale(1.05);
-      background: rgba(239, 68, 68, 0.9); /* Slightly darker red using rgba */
+      background: rgba(239, 68, 68, 0.9);
     }
   }
 }

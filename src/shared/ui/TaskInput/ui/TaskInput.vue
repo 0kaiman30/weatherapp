@@ -41,8 +41,8 @@ input {
   border: 1px solid rgba(var(--green-color), 0.3);
   border-radius: 10px;
   width: 100%;
-  font-size: 15px;
   background-color: var(--secondary-color);
+  font-size: 15px;
   color: var(--text-color-secondary);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 

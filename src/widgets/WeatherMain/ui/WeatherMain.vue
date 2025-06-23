@@ -2,43 +2,43 @@
   <div class="weatherPage">
     <div class="weatherPage_mainPart">
       <div v-if="isLoading" class="loading-message">
-        <p>Загрузка данных о погоде...</p>
+        <p>Loading weather data...</p>
       </div>
       <div v-else-if="error" class="error-message">
         <p>{{ error }}</p>
-        <Button @click="error = ''">Очистить</Button>
+        <Button @click="error = ''">Clear</Button>
       </div>
       <div v-else-if="weather && selectedCity">
         <div class="weatherPage_content">
           <div class="leftPart">
-            <div class="weatherPage_search">
-              <CityInput
-                v-model="cityInput"
-                placeholder="Введите название города"
-                @select-city="handleCitySelect"
+          <div class="weatherPage_search">
+            <CityInput
+              v-model="cityInput"
+              placeholder="Enter city name"
+              @select-city="handleCitySelect"
+            />
+            <Button
+              variant="styled"
+              size="small"
+              @click="fetchWeatherWithCheck"
+              :disabled="isLoading"
+            >
+              {{ isLoading ? "Loading..." : "Search" }}
+            </Button>
+          </div>
+          <div class="forecast__currentTime">
+            <div class="forecast__daily">
+              <DailyCard
+                v-for="day in dailyData"
+                :key="day.date"
+                :date="day.date"
+                :temp="day.temp"
+                :description="day.description"
+                :icon="day.icon"
+                :city="selectedCity"
               />
-              <Button
-                variant="styled"
-                size="small"
-                @click="fetchWeatherWithCheck"
-                :disabled="isLoading"
-              >
-                {{ isLoading ? "Загрузка..." : "Поиск" }}
-              </Button>
             </div>
-            <div class="forecast__currentTime">
-              <div class="forecast__daily">
-                <DailyCard
-                  v-for="day in dailyData"
-                  :key="day.date"
-                  :date="day.date"
-                  :temp="day.temp"
-                  :description="day.description"
-                  :icon="day.icon"
-                  :city="selectedCity"
-                />
-              </div>
-            </div>
+          </div>
           </div>
           <div class="rightPart">
             <CurrentTimeWeather
@@ -96,7 +96,7 @@ const loadSavedCity = async () => {
       cityInput.value = cityData.name;
       await fetchWeather(cityData);
     } catch (e) {
-      console.error("Ошибка при загрузке сохраненного города:", e);
+      console.error("Error loading saved city:", e);
       await loadDefaultCity();
     }
   } else {
@@ -142,7 +142,7 @@ function mapToCurrentProps(item: any) {
 
 const fetchWeatherWithCheck = async () => {
   if (!cityInput.value.trim()) {
-    error.value = "Введите название города";
+    error.value = "Please enter a city name";
     return;
   }
   try {
@@ -150,11 +150,11 @@ const fetchWeatherWithCheck = async () => {
     if (coordsData.length) {
       await handleCitySelect(coordsData[0]);
     } else {
-      error.value = "Город не найден";
+      error.value = "City not found";
     }
   } catch (e) {
     error.value =
-      "Ошибка при поиске города: " +
+      "Error searching for city: " +
       (e instanceof Error ? e.message : String(e));
   }
 };

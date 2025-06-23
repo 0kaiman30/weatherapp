@@ -1,44 +1,44 @@
 <template>
   <div class="todoList">
-    <h2>Список задач</h2>
+    <h2>Todo List</h2>
     <div class="todoList__input">
       <TaskInput
         v-model="newTask"
-        placeholder="Введите новую задачу"
+        placeholder="Enter a new task"
         @keyup.enter="addTask"
         class="todoList__task-input"
       />
       <Button
-        variant="styled"
+        variant="add"
         size="small"
         @click="addTask"
         :disabled="!newTask.trim()"
         class="todoList__add-button"
       >
-        Добавить
+        Add
       </Button>
     </div>
     <div class="todoList__tasks">
-      <div v-if="!tasks.length" class="no-tasks">Нет активных задач</div>
+      <div v-if="!tasks.length" class="no-tasks">No active tasks</div>
       <div v-for="task in tasks" :key="task.id" class="task">
         <div v-if="editingTaskId !== task.id" class="task-content">
           <span class="task-text">{{ task.text }}</span>
           <span class="task-date"
-            >(Создано: {{ formatDate(task.createdAt) }})</span
+            >(Created: {{ formatDate(task.createdAt) }})</span
           >
           <div class="task-actions">
-            <Button variant="styled" size="small" @click="startEditing(task)">
-              Редактировать
+            <Button variant="edit" size="small" @click="startEditing(task)">
+              Edit
             </Button>
             <Button
-              variant="styled"
+              variant="complete"
               size="small"
               @click="completeTask(task.id)"
             >
-              Завершить
+              Complete
             </Button>
-            <Button variant="styled" size="small" @click="deleteTask(task.id)">
-              Удалить
+            <Button variant="delete" size="small" @click="deleteTask(task.id)">
+              Delete
             </Button>
           </div>
         </div>
@@ -48,11 +48,11 @@
             @keyup.enter="saveTask(task.id)"
             class="todoList__task-input"
           />
-          <Button variant="styled" size="small" @click="saveTask(task.id)">
-            Сохранить
+          <Button variant="save" size="small" @click="saveTask(task.id)">
+            Save
           </Button>
-          <Button variant="styled" size="small" @click="cancelEditing">
-            Отмена
+          <Button variant="cancel" size="small" @click="cancelEditing">
+            Cancel
           </Button>
         </div>
       </div>
@@ -94,7 +94,7 @@ const STORAGE_KEY = "todoListTasks";
 const STORAGE_COMPLETED_KEY = "todoListCompletedTasks";
 
 const formatDate = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleString("ru-RU", {
+  return new Date(timestamp * 1000).toLocaleString("en-US", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -176,13 +176,10 @@ const deleteTask = (taskId: string) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks.value));
 };
 </script>
+
 <style scoped lang="scss">
 .todoList {
-  background: linear-gradient(
-    135deg,
-    var(--secondary-color) 60%,
-    rgba(var(--green-color), 0.08)
-  );
+  background-color: var(--back-color);
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -213,7 +210,6 @@ const deleteTask = (taskId: string) => {
 
     .todoList__task-input {
       flex-grow: 1;
-      padding: 8px 12px;
       border: 1px solid rgba(var(--green-color), 0.3);
       border-radius: 6px;
       font-size: 14px;
@@ -226,26 +222,9 @@ const deleteTask = (taskId: string) => {
     }
 
     .todoList__add-button {
-      background: var(--green-color);
-      color: var(--text-color);
       padding: 8px 12px;
       border-radius: 6px;
       transition: transform 0.3s ease, background 0.3s ease;
-
-      &:hover:not(:disabled) {
-        transform: scale(1.05);
-        background: rgba(
-          24,
-          237,
-          116,
-          0.9
-        ); /* Slightly darker green using rgba */
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
     }
   }
 
@@ -302,32 +281,6 @@ const deleteTask = (taskId: string) => {
   .task-actions {
     display: flex;
     gap: 6px;
-
-    button {
-      padding: 6px 10px;
-      font-size: 12px;
-      border-radius: 4px;
-      transition: transform 0.3s ease, background 0.3s ease;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      &:first-child {
-        background: var(--blue-color);
-        color: var(--text-color);
-      }
-
-      &:nth-child(2) {
-        background: var(--green-color);
-        color: var(--text-color);
-      }
-
-      &:last-child {
-        background: var(--red-color);
-        color: var(--text-color);
-      }
-    }
   }
 
   .task-edit {
@@ -346,27 +299,6 @@ const deleteTask = (taskId: string) => {
       &:focus {
         border-color: var(--green-color);
         outline: none;
-      }
-    }
-
-    button {
-      padding: 6px 10px;
-      font-size: 12px;
-      border-radius: 4px;
-      transition: transform 0.3s ease, background 0.3s ease;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      &:first-child {
-        background: var(--green-color);
-        color: var(--text-color);
-      }
-
-      &:last-child {
-        background: var(--red-color);
-        color: var(--text-color);
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <Button size="small" @click="toggleTheme">
+  <Button size="small" variant="icon" @click="toggleTheme">
     <img
       :src="
         theme === 'dark'

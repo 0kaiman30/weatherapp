@@ -44,11 +44,7 @@ const formattedTime = computed(() => {
   gap: 8px;
   width: 140px;
   padding: 12px;
-  background: linear-gradient(
-    135deg,
-    var(--secondary-color) 60%,
-    rgba(var(--green-color), 0.08)
-  );
+  background-color: var(--secondary-color);
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   color: var(--text-color-secondary);

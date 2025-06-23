@@ -2,19 +2,19 @@
   <div class="current-weather">
     <div class="current-weather__main">
       <div class="current-weather__info">
-        <h2>Погода сейчас в {{ city.name }}</h2>
+        <h2>Weather now in {{ city.name }}</h2>
         <p class="description">
           <strong>{{ description }}</strong>
         </p>
         <div class="weather-details">
-          <p>Температура: {{ temp }} °C</p>
-          <p>Ощущается как: {{ feelsLike }} °C</p>
-          <p>Давление: {{ pressure }} hPa</p>
-          <p>Влажность: {{ humidity }}%</p>
-          <p>Облачность: {{ clouds }}%</p>
-          <p>Видимость: {{ visibility / 1000 }} км</p>
-          <p>Ветер: {{ windSpeed }} м/с, {{ windDeg }}°</p>
-          <p>Дождь за час: {{ rain }} мм</p>
+          <p>Temperature: {{ temp }} °C</p>
+          <p>Feels like: {{ feelsLike }} °C</p>
+          <p>Pressure: {{ pressure }} hPa</p>
+          <p>Humidity: {{ humidity }}%</p>
+          <p>Clouds: {{ clouds }}%</p>
+          <p>Visibility: {{ visibility / 1000 }} km</p>
+          <p>Wind: {{ windSpeed }} m/s, {{ windDeg }}°</p>
+          <p>Rain per hour: {{ rain }} mm</p>
         </div>
       </div>
       <img

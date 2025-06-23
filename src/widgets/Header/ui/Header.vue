@@ -27,7 +27,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--primary-color);
+  background-color: var(--back-color);
   color: var(--text-color);
   height: 64px;
   padding: 0 32px;
@@ -39,7 +39,6 @@ header {
 
 .header_nav {
   display: flex;
-  align-items: center;
   gap: 16px;
 }
 
@@ -51,7 +50,7 @@ header {
 }
 
 .header_li {
-  padding: 8px 12px;
+  padding: 0 12px;
 }
 
 .header_li_router {
