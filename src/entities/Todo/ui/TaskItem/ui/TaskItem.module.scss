@@ -1,0 +1,96 @@
+
+.task {
+  padding: 12px;
+  background: var(--secondary-color);
+  border-radius: 8px;
+  border: 1px solid rgba(var(--green-color), 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.task-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  align-items: center;
+  gap: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .task-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    text-transform: capitalize;
+  }
+
+  .task-date {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: flex-start;
+
+    &::before {
+      content: "•";
+      color: var(--green-color);
+      font-size: 8px;
+    }
+
+    @media (max-width: 768px) {
+      justify-content: center;
+    }
+  }
+}
+
+.task-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.task-edit {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .todoList__task-input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid rgba(var(--green-color), 0.3);
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: var(--green-color);
+      outline: none;
+    }
+
+    @media (max-width: 576px) {
+      width: 100%;
+    }
+  }
+
+  button {
+    @media (max-width: 576px) {
+      width: 100%;
+    }
+  }
+}

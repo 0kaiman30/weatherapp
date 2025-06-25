@@ -80,4 +80,45 @@
       }
     }
   }
+  @media (max-width: 576px) {
+    width: 120px;
+    padding: 10px;
+  }
+
+  @media (max-width: 400px) {
+    width: 100px;
+    padding: 8px;
+  }
+
+  &__icon {
+    @media (max-width: 576px) {
+      width: 32px;
+      height: 32px;
+    }
+
+    @media (max-width: 400px) {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__temp {
+    font-size: 16px;
+
+    @media (max-width: 576px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 400px) {
+      font-size: 12px;
+    }
+  }
+
+  &__description {
+    font-size: 12px;
+
+    @media (max-width: 576px) {
+      font-size: 10px;
+    }
+  }
 }

@@ -1,85 +1,80 @@
 <template>
   <div :class="cls.weatherPage">
     <div :class="cls.weatherPage_mainPart">
-      <div v-if="isLoading" :class="cls['loading-message']">
-        <p>Loading weather data...</p>
-      </div>
-      <div v-else-if="error" :class="cls['error-message']">
-        <p>{{ error }}</p>
-        <Button @click="error = ''">Clear</Button>
-      </div>
-      <div v-else-if="weather && selectedCity">
-        <div :class="cls.weatherPage_content">
-          <div :class="cls.leftPart">
-            <div :class="cls.weatherPage_search">
-              <CityInput
-                v-model="cityInput"
-                placeholder="Enter city name"
-                @select-city="handleCitySelect"
-              />
-              <Button
-                variant="styled"
-                size="small"
-                @click="fetchWeatherWithCheck"
-                :disabled="isLoading"
-              >
-                {{ isLoading ? "Loading..." : "Search" }}
-              </Button>
+      <AsyncContent :is-loading="isLoading" :error="error">
+        <template v-if="weather && selectedCity">
+          <div :class="cls.weatherPage_content">
+            <div :class="[cls.col, cls['col-6'], cls.leftPart]">
+              <div :class="cls.weatherPage_search">
+                <CityInput
+                  v-model="cityInput"
+                  placeholder="Enter city name"
+                  @select-city="handleCitySelect"
+                />
+                <Button
+                  variant="primary"
+                  size="small"
+                  @click="fetchWeatherWithCheck"
+                  :disabled="isLoading"
+                >
+                  {{ isLoading ? "Loading..." : "Search" }}
+                </Button>
+              </div>
+              <div :class="cls['forecast__currentTime']">
+                <div :class="cls['forecast__daily']">
+                  <DailyCard
+                    v-for="day in dailyData"
+                    :key="day.date"
+                    :date="day.date"
+                    :temp="day.temp"
+                    :description="day.description"
+                    :icon="day.icon"
+                    :city="selectedCity"
+                  />
+                </div>
+              </div>
             </div>
-            <div :class="cls['forecast__currentTime']">
-              <div :class="cls['forecast__daily']">
-                <DailyCard
-                  v-for="day in dailyData"
-                  :key="day.date"
-                  :date="day.date"
-                  :temp="day.temp"
-                  :description="day.description"
-                  :icon="day.icon"
-                  :city="selectedCity"
+            <div :class="[cls.col, cls['col-6'], cls.rightPart]">
+              <CurrentTimeWeather
+                v-if="hourlyData.length"
+                v-bind="mapToCurrentProps(hourlyData[0])"
+                :city="selectedCity"
+              />
+              <div :class="cls['forecast__hourly']">
+                <HourCard
+                  v-for="hour in hourlyData.slice(0, 9)"
+                  :key="hour.dt"
+                  :time="hour.dt"
+                  :temp="hour.main.temp"
+                  :description="hour.weather[0].description"
+                  :icon="hour.weather[0].icon"
                 />
               </div>
             </div>
           </div>
-          <div :class="cls.rightPart">
-            <CurrentTimeWeather
-              v-if="hourlyData.length"
-              v-bind="mapToCurrentProps(hourlyData[0])"
-              :city="selectedCity"
-            />
-            <div :class="cls['forecast__hourly']">
-              <HourCard
-                v-for="hour in hourlyData.slice(0, 9)"
-                :key="hour.dt"
-                :time="hour.dt"
-                :temp="hour.main.temp"
-                :description="hour.weather[0].description"
-                :icon="hour.weather[0].icon"
-              />
-            </div>
+          <div :class="cls.todoList">
+            <TodoList :weather="weather" :city="selectedCity.name" />
           </div>
-        </div>
-        <div :class="cls.todoList">
-          <TodoList :weather="weather" :city="selectedCity.name" />
-        </div>
-      </div>
+        </template>
+      </AsyncContent>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import cls from "./WeatherMain.module.scss";
 import { onMounted, ref } from "vue";
-import {
-  Button,
-  CityInput,
-  CurrentTimeWeather,
-  DailyCard,
-  HourCard,
-} from "../../../shared/ui";
 import { useWeather } from "../../../shared/lib";
 import type { CityData } from "../../../shared/api/openWeatherApi";
 import { getCoordinatesByCity } from "../../../shared/api/openWeatherApi";
-import { TodoList } from "../../index";
-import cls from "./WeatherMain.module.scss";
+import { TodoList } from "../../TodoList";
+import { HourCard } from "../../../shared/ui/HourCard";
+import { CurrentTimeWeather } from "../../../shared/ui/CurrentTimeWeather";
+import { DailyCard } from "../../../shared/ui/DailyCard";
+import { Button } from "../../../shared/ui/Button";
+import { CityInput } from "../../../shared/ui/CityInput";
+import { loadCity, saveCity } from "../../../shared/lib/browser/storage";
+import { AsyncContent } from "../../../shared/ui/AsyncContent";
 
 const { weather, hourlyData, dailyData, isLoading, error, fetchWeather } =
   useWeather();
@@ -89,13 +84,12 @@ const selectedCity = ref<CityData | null>(null);
 const STORAGE_KEY = "weatherAppCity";
 
 const loadSavedCity = async () => {
-  const savedCity = localStorage.getItem(STORAGE_KEY);
+  const savedCity = loadCity();
   if (savedCity) {
     try {
-      const cityData = JSON.parse(savedCity) as CityData;
-      selectedCity.value = cityData;
-      cityInput.value = cityData.name;
-      await fetchWeather(cityData);
+      selectedCity.value = savedCity;
+      cityInput.value = savedCity.name;
+      await fetchWeather(savedCity);
     } catch (e) {
       console.error("Error loading saved city:", e);
       await loadDefaultCity();
@@ -115,14 +109,14 @@ const loadDefaultCity = async () => {
   selectedCity.value = defaultCity;
   cityInput.value = defaultCity.name;
   await fetchWeather(defaultCity);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultCity));
+  saveCity(defaultCity);
 };
 
 const handleCitySelect = async (cityData: CityData) => {
   selectedCity.value = cityData;
   cityInput.value = cityData.name;
   await fetchWeather(cityData);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cityData));
+  saveCity(cityData);
 };
 
 function mapToCurrentProps(item: any) {

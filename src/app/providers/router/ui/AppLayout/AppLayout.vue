@@ -6,7 +6,5 @@
 </template>
 
 <script setup lang="ts">
-import { Header } from "../../../../../widgets/index";
+import { Header } from '../../../../../widgets/Header';
 </script>
-
-<script></script>

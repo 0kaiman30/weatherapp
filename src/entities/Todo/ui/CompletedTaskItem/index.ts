@@ -1,0 +1,1 @@
+export { default as CompletedTaskItem} from './ui/CompletedTaskItem.vue'
