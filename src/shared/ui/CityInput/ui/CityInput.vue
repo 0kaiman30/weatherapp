@@ -30,7 +30,7 @@ import {
 } from "../../../api/openWeatherApi";
 import cls from "./CityInput.module.scss";
 
-const props = defineProps<{
+defineProps<{
   modelValue: string;
   placeholder?: string;
 }>();

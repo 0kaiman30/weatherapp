@@ -15,7 +15,7 @@
 import { ref } from "vue";
 import cls from "./TaskInput.module.scss";
 
-const props = defineProps<{
+defineProps<{
   modelValue: string;
   placeholder?: string;
 }>();

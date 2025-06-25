@@ -46,7 +46,7 @@ import { Button } from "../../../shared/ui/Button";
 import { useTodo } from "../../../shared/lib/hooks/useTodo";
 import { TaskItem } from "../../../entities/Todo/ui/TaskItem";
 
-const props = defineProps<{
+defineProps<{
   weather: WeatherData | null;
   city: string;
 }>();

@@ -81,7 +81,7 @@ const { weather, hourlyData, dailyData, isLoading, error, fetchWeather } =
 const cityInput = ref("");
 const selectedCity = ref<CityData | null>(null);
 
-const STORAGE_KEY = "weatherAppCity";
+// const STORAGE_KEY = "weatherAppCity";
 
 const loadSavedCity = async () => {
   const savedCity = loadCity();
